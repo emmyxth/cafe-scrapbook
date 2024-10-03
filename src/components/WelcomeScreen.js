@@ -2,69 +2,108 @@ import React, { useState } from "react";
 
 const WelcomeScreen = ({ onEnter }) => {
   const [name, setName] = useState("");
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const handleEnter = () => {
     if (name.trim()) {
-      onEnter(name);
+      setIsFadingOut(true);
+      setTimeout(() => {
+        onEnter(name);
+      }, 1000); // Adjust this timeout to match the animation duration
     }
   };
 
   return (
-    <div className="welcome-screen">
+    <div className={`welcome-screen ${isFadingOut ? "fade-out" : ""}`}>
       <div className="welcome-container">
-        <h1 className="welcome-title">Welcome to Cafe Scrapbook</h1>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="welcome-input"
-        />
-        <button onClick={handleEnter} className="welcome-button">
-          Enter
-        </button>
+        <h1 className="welcome-title">welcome</h1>
+        <div className="input-container">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleEnter()}
+            className="welcome-input"
+          />
+          <button onClick={handleEnter} className="enter-button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12H19M19 12L12 5M19 12L12 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <div className="input-label">TYPE YOUR NAME</div>
+        </div>
       </div>
       <style jsx>{`
+        @import url("https://fonts.googleapis.com/css2?family=Averia+Serif+Libre&family=Epilogue&display=swap");
+
         .welcome-screen {
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 100vh;
-          background: linear-gradient(to right, #fff8e1, #ffecb3);
-          font-family: Arial, sans-serif;
+          background-color: white;
+          font-family: "Epilogue", sans-serif;
+          opacity: 1;
+          transition: opacity 1s ease-out;
+        }
+        .welcome-screen.fade-out {
+          opacity: 0;
         }
         .welcome-container {
-          background-color: white;
-          padding: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           text-align: center;
         }
         .welcome-title {
-          color: #5d4037;
-          font-size: 1.8rem;
-          margin-bottom: 1.5rem;
+          color: #c55a48;
+          font-family: "Averia Serif Libre", cursive;
+          font-size: 4rem;
+          margin-bottom: 1rem;
+        }
+        .input-container {
+          position: relative;
+          width: 300px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
         }
         .welcome-input {
-          width: 100%;
+          flex-grow: 1;
           padding: 0.5rem;
-          margin-bottom: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          font-size: 1rem;
-        }
-        .welcome-button {
-          background-color: #795548;
-          color: white;
           border: none;
-          padding: 0.5rem 1rem;
+          border-bottom: 2px solid black;
           font-size: 1rem;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
+          background: transparent;
+          outline: none;
         }
-        .welcome-button:hover {
-          background-color: #5d4037;
+        .enter-button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          margin-left: 10px;
+          color: #c55a48;
+          transition: color 0.3s ease;
+        }
+        .enter-button:hover {
+          color: #9e4539;
+        }
+        .input-label {
+          position: absolute;
+          left: 0;
+          bottom: -20px;
+          font-size: 0.8rem;
+          color: black;
         }
       `}</style>
     </div>
