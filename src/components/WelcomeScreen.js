@@ -9,13 +9,20 @@ const WelcomeScreen = ({ onEnter }) => {
       setIsFadingOut(true);
       setTimeout(() => {
         onEnter(name);
-      }, 1000); // Adjust this timeout to match the animation duration
+      }, 1000);
     }
   };
 
   return (
     <div className={`welcome-screen ${isFadingOut ? "fade-out" : ""}`}>
       <div className="welcome-container">
+        <div className="coffee-gif-container">
+          <img
+            src="/assets/coffee.gif"
+            alt="Coffee GIF"
+            className="coffee-gif"
+          />
+        </div>
         <h1 className="welcome-title">welcome</h1>
         <div className="input-container">
           <input
@@ -53,7 +60,7 @@ const WelcomeScreen = ({ onEnter }) => {
           align-items: center;
           justify-content: center;
           min-height: 100vh;
-          background-color: white;
+          background-color: #e6ded5;
           font-family: "Epilogue", sans-serif;
           opacity: 1;
           transition: opacity 1s ease-out;
@@ -63,6 +70,13 @@ const WelcomeScreen = ({ onEnter }) => {
         }
         .welcome-container {
           text-align: center;
+        }
+        .coffee-gif-container {
+          margin-bottom: 20px;
+        }
+        .coffee-gif {
+          max-width: 200px;
+          height: auto;
         }
         .welcome-title {
           color: #c55a48;
