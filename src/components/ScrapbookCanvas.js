@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ScrapbookItem from "./ScrapbookItem";
 
 const ScrapbookCanvas = ({ items, onUpdateItem }) => {
+  const [panningDisabled, setPanningDisabled] = useState(false);
+
   return (
     <TransformWrapper
       initialScale={1}
       initialPositionX={0}
       initialPositionY={0}
+      panning={{ disabled: panningDisabled }}
     >
       <TransformComponent>
-        <div className="scrapbook-canvas">
+        <div
+          className="scrapbook-canvas"
+          onMouseDown={(e) => {
+            if (e.target.closest(".scrapbook-item")) {
+              setPanningDisabled(true);
+            }
+          }}
+          onMouseUp={() => setPanningDisabled(false)}
+          onMouseLeave={() => setPanningDisabled(false)}
+        >
           {items.map((item) => (
             <ScrapbookItem
               key={item.id}
@@ -25,9 +37,8 @@ const ScrapbookCanvas = ({ items, onUpdateItem }) => {
         .scrapbook-canvas {
           width: 1800px;
           height: 1200px;
-          background-color: #f0f0f0;
+          background-color: #ffffff;
           position: relative;
-          border: 1px solid #ccc;
         }
       `}</style>
     </TransformWrapper>

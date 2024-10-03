@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import { useDrag } from "react-dnd";
+import React from "react";
 import { Rnd } from "react-rnd";
 
 const ScrapbookItem = ({
@@ -12,18 +11,6 @@ const ScrapbookItem = ({
   content,
   onUpdate,
 }) => {
-  const ref = useRef(null);
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "scrapbook-item",
-    item: { id, left, top },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  drag(ref);
-
   const handleDrag = (e, d) => {
     onUpdate({ left: d.x, top: d.y });
   };
@@ -32,7 +19,8 @@ const ScrapbookItem = ({
     onUpdate({
       width: parseInt(ref.style.width, 10),
       height: parseInt(ref.style.height, 10),
-      ...position,
+      left: position.x,
+      top: position.y,
     });
   };
 
@@ -68,22 +56,22 @@ const ScrapbookItem = ({
   };
 
   return (
-    <div ref={ref} style={{ position: "absolute", left, top }}>
-      <Rnd
-        size={{ width, height }}
-        position={{ x: 0, y: 0 }}
-        onDragStop={handleDrag}
-        onResize={handleResize}
-        bounds="parent"
-        style={{
-          opacity: isDragging ? 0.5 : 1,
-          border: "1px solid #ddd",
-          background: "#f0f0f0",
-        }}
-      >
-        {renderContent()}
-      </Rnd>
-    </div>
+    <Rnd
+      size={{ width, height }}
+      position={{ x: left, y: top }}
+      onDragStop={handleDrag}
+      onResizeStop={handleResize}
+      bounds="parent"
+      style={{
+        border: "1px solid #ddd",
+        background: "#f0f0f0",
+      }}
+      // Add the following event handlers:
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+    >
+      {renderContent()}
+    </Rnd>
   );
 };
 

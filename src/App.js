@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import WelcomeScreen from "./components/WelcomeScreen";
 import ScrapbookCanvas from "./components/ScrapbookCanvas";
 import PhotoUploader from "./components/PhotoUploader";
@@ -64,37 +62,18 @@ const App = () => {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="app">
-        {!user ? (
-          <WelcomeScreen onEnter={handleEnter} />
-        ) : (
-          <>
-            <h1>Welcome, {user.name}!</h1>
-            <PhotoUploader onUpload={handleUpload} />
-            <ToolBar
-              onAddText={handleAddText}
-              onAddSticker={handleAddSticker}
-            />
-            <ScrapbookCanvas items={items} onUpdateItem={handleUpdateItem} />
-          </>
-        )}
-
-        <style jsx>{`
-          .app {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-          }
-          h1 {
-            color: #795548;
-            text-align: center;
-            margin-bottom: 20px;
-          }
-        `}</style>
-      </div>
-    </DndProvider>
+    <div className="app">
+      {!user ? (
+        <WelcomeScreen onEnter={handleEnter} />
+      ) : (
+        <>
+          <h1>Welcome, {user.name}!</h1>
+          <PhotoUploader onUpload={handleUpload} />
+          <ToolBar onAddText={handleAddText} onAddSticker={handleAddSticker} />
+          <ScrapbookCanvas items={items} onUpdateItem={handleUpdateItem} />
+        </>
+      )}
+    </div>
   );
 };
 
