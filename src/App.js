@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import WelcomeScreen from "./components/WelcomeScreen";
 import ScrapbookCanvas from "./components/ScrapbookCanvas";
 import PhotoUploader from "./components/PhotoUploader";
-import ToolBar from "./components/Toolbar";
+import StickerBar from "./components/StickerBar";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [items, setItems] = useState([]);
+  const [fadeIn, setFadeIn] = useState(false);
+  const [contentFadeIn, setContentFadeIn] = useState(false);
+
+  // List of sticker assets
+  const stickerAssets = [
+    { id: 1, src: "/assets/sticker_1.png" },
+    { id: 2, src: "/assets/sticker_2.png" },
+    { id: 3, src: "/assets/sticker_3.png" },
+    // Add more stickers as needed
+  ];
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => setContentFadeIn(true), 100);
+    }
+  }, [user]);
 
   const handleEnter = (name) => {
     setUser({ name });
+    setContentFadeIn(false);
   };
 
   const handleUpload = (photos) => {
@@ -62,18 +83,20 @@ const App = () => {
   };
 
   return (
-    <div className="app">
+    <div className={`app ${fadeIn ? "fade-in" : ""}`}>
       {!user ? (
         <WelcomeScreen onEnter={handleEnter} />
       ) : (
-        <div className="scrapbook-container">
+        <div
+          className={`scrapbook-container ${contentFadeIn ? "fade-in" : ""}`}
+        >
           <h1 className="welcome-header">Welcome, {user.name}!</h1>
           <div className="scrapbook-content">
             <PhotoUploader onUpload={handleUpload} />
-            {/* <ToolBar
-              onAddText={handleAddText}
-              onAddSticker={handleAddSticker}
-            /> */}
+            <StickerBar
+              stickers={stickerAssets}
+              onSelectSticker={handleAddSticker}
+            />
             <ScrapbookCanvas items={items} onUpdateItem={handleUpdateItem} />
           </div>
         </div>
@@ -85,9 +108,19 @@ const App = () => {
           min-height: 100vh;
           background-color: #e6ded5;
           font-family: "Epilogue", sans-serif;
+          opacity: 0;
+          transition: opacity 1s ease-in;
+        }
+        .app.fade-in {
+          opacity: 1;
         }
         .scrapbook-container {
           padding: 2rem;
+          opacity: 0;
+          transition: opacity 1s ease-in;
+        }
+        .scrapbook-container.fade-in {
+          opacity: 1;
         }
         .welcome-header {
           font-family: "Averia Serif Libre", cursive;

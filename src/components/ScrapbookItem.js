@@ -23,6 +23,23 @@ const ScrapbookItem = ({
       top: position.y,
     });
   };
+  const [border, setBorder] = React.useState(false);
+
+  const handleClickAway = (e) => {
+    if (!e.target.closest(".scrapbook-item")) {
+      setBorder(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickAway);
+    document.addEventListener("touchstart", handleClickAway);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickAway);
+      document.removeEventListener("touchstart", handleClickAway);
+    };
+  }, []);
 
   const renderContent = () => {
     switch (type) {
@@ -63,12 +80,18 @@ const ScrapbookItem = ({
       onResizeStop={handleResize}
       bounds="parent"
       style={{
-        border: "1px solid #ddd",
-        background: "#f0f0f0",
+        background: "none",
+        border: border ? "2px solid gray" : "none",
       }}
       // Add the following event handlers:
-      onMouseDown={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+        setBorder(true);
+      }}
+      onTouchStart={(e) => {
+        e.stopPropagation();
+        setBorder(true);
+      }}
     >
       {renderContent()}
     </Rnd>

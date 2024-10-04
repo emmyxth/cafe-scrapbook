@@ -35,7 +35,7 @@ const ScrapbookCanvas = ({ items, onUpdateItem }) => {
 
       <style jsx>{`
         .scrapbook-canvas {
-          width: 1200px;
+          width: 1400px;
           height: 1200px;
           background-color: #ffffff;
           position: relative;
